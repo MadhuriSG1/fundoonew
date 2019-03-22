@@ -1,0 +1,184 @@
+<div class="noteover">
+   <mat-card class="cardresize" [style.background-color]="notedetails.note.color">
+      <mat-card-title (click)="openDialog()">
+         <p>{{notedetails.note.title}}</p>
+      </mat-card-title>
+      <button mat-icon-button class=buttons style="position: absolute; right: 0;margin-top: -80px" (click)="pinned()">
+         <mat-icon *ngIf="notedetails.note.isPin"><img src="assets/images/pinAfterClick(1).svg"></mat-icon>
+         <mat-icon *ngIf="!notedetails.note.isPin"><img src="assets/images/pinBeforeClick.svg"></mat-icon>
+      </button>
+
+      <mat-card-subtitle (click)="openDialog()">
+         <p>
+            {{notedetails.note.description}}
+         </p>
+      </mat-card-subtitle>
+      <mat-card-content>
+         <mat-chip-list>
+            <div *ngFor="let item of notedetails.note.labels"  style="padding-bottom: 5px;">
+               <mat-chip [selectable]="selectable" [removable]="removable">
+                  {{item.labelTitle}} <button class="icon1" mat-icon-button
+                     (click)="removeThisLabel(item,notedetails.note)">
+                     <mat-icon>close</mat-icon>
+                  </button></mat-chip>
+            </div>
+         </mat-chip-list>
+
+
+
+         <div fxLayout="row wrap">
+            <div *ngFor="let person of notedetails.collabList">
+               <button mat-icon-button class="icon" matTooltip={{person.email}}>
+
+                  {{person.email[0]}}
+
+               </button>
+            </div>
+         </div>
+
+         <mat-chip-list>
+
+            <mat-chip class="chipsize" *ngIf="notedetails.note.reminder!==null" (removed)="removeRemainder()">
+               {{d.toLocaleDateString()+" "+d.toLocaleTimeString()}}
+               <mat-icon matChipRemove>close</mat-icon>
+            </mat-chip>
+
+         </mat-chip-list>
+      </mat-card-content>
+
+      <div >
+         <mat-card-footer class=buttons>
+            <div>
+
+               <button mat-icon-button matTooltip="Remind me" [matMenuTriggerFor]="notificationmenu">
+                  <mat-icon aria-label="Example icon-button with a heart icon">
+                     add_alert
+                  </mat-icon>
+               </button>
+               <mat-menu #notificationmenu="matMenu" class="custom">
+                  <span mat-menu-item>Reminders</span>
+                  <button mat-menu-item (click)="setLaterToday()">
+                     <div>
+                        <span style="float: left;">Later today</span>
+                        <span style="float: right;">8.00PM</span>
+                     </div>
+                  </button>
+
+                  <button mat-menu-item (click)="setTomorrow()">
+                     <div>
+                        <span style="float: left;">Tommorow</span>
+                        <span style="float: right;">8.00AM</span>
+                     </div>
+                  </button>
+
+                  <button mat-menu-item (click)="setNextWeek()">
+                     <div>
+                        <span style="float:left;">Next week</span>
+                        <span style="float:right;">Mon, 8.00AM</span>
+                     </div>
+                  </button>
+
+
+                  <button mat-menu-item [owlDateTimeTrigger]="dt1" [matMenuTriggerFor]="pickMenu">
+                     <div>
+                        <span style="float:left;">Pick date time</span>
+                     </div>
+                     <mat-menu #pickMenu="matMenu" style="size: 50px;">
+
+                        <!-- <div class="pickerDiv">
+                              <span  style="float:left;">Pick time
+                        <input class="pickerInput" [ngxTimepicker]="picker" >
+                        <ngx-material-timepicker (click)="$event.stopPropagation()" #picker>
+
+                        </ngx-material-timepicker> 
+                     </span>
+                  </div>  -->
+                        <div class="toggle-example">
+                           <span style="float:left;">Pick time
+                              <input [ngxTimepicker]="toggleTimepicker" [disableClick]="true">
+                              <ngx-material-timepicker-toggle [for]="toggleTimepicker"></ngx-material-timepicker-toggle>
+                              <ngx-material-timepicker #toggleTimepicker (click)="$event.stopPropagation()">
+
+                              </ngx-material-timepicker>
+                           </span>
+                        </div>
+                        <!-- <div class="12hr-example">
+                           <span style="float:left;">Pick  time</span>
+                        <input placeholder="12hr format (default settings)" aria-label="12hr format" [ngxTimepicker]="default" readonly>
+                        <ngx-material-timepicker (click)="$event.stopPropagation()" #default></ngx-material-timepicker>
+                   </div> -->
+                     </mat-menu>
+                  </button>
+
+               </mat-menu>
+
+               <input [formControl]="dateTime" [owlDateTime]="dt1" dateTimeChange="method()" #openid
+                  (dateTimeChange)="SetRemainder($event)" style="display: none;">
+               <owl-date-time #dt1></owl-date-time>
+
+
+               <button mat-icon-button matTooltip="Collaborator" (click)="openColabDialog()">
+                  <mat-icon aria-label="Example icon-button with a heart icon">
+                     person_add
+                  </mat-icon>
+               </button>
+               <button mat-icon-button [matMenuTriggerFor]="colormenu" matTooltip="Change color">
+                  <mat-icon aria-label="Example icon-button with a heart icon">
+                     palette
+                  </mat-icon>
+               </button>
+               <mat-menu #colormenu="matMenu">
+                  <mat-list>
+
+                     <div *ngFor="let colorx of colors">
+                        <span *ngFor="let single of colorx">
+                           <button class="manual" mat-icon-button (click)="changeColor(single)">
+                              <mat-icon [style.color]="single">fiber_manual_record</mat-icon>
+                           </button>
+                        </span>
+                     </div>
+                  </mat-list>
+               </mat-menu>
+
+               <button mat-icon-button matTooltip="Add image">
+                  <mat-icon aria-label="Example icon-button with a heart icon">
+                     add_photo_alternate
+                  </mat-icon>
+
+               </button>
+               <button mat-icon-button (click)="archivenote()" matTooltip="Archive">
+                  <mat-icon aria-label="Example icon-button with a heart icon">
+                     archive
+                  </mat-icon>
+               </button>
+               <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="More">
+                  <mat-icon aria-label="Example icon-button with a heart icon">
+                     more_vert
+                  </mat-icon>
+                  <mat-menu #menu="matMenu">
+                     <button mat-menu-item (click)="noteDelete()">Delete note</button>
+                     <button mat-menu-item [matMenuTriggerFor]="menulabel">Add Label
+                        <mat-menu #menulabel="matMenu">
+                           <mat-list>
+                              <div *ngFor="let label of labelsall">
+                                 {{label.labelTitle}} <button
+                                    (click)="haveThisLabel(label,notedetails.note)">Add</button>
+                                 <button (click)="removeThisLabel(label,notedetails.note)">Remove</button>
+                              </div>
+                           </mat-list>
+
+                        </mat-menu>
+                     </button>
+                     <button mat-menu-item (click)="trashnote()">Add to Trash</button>
+                     <button mat-menu-item (click)="restore()">Restore</button>
+
+
+                  </mat-menu>
+               </button>
+
+
+            </div>
+         </mat-card-footer>
+      </div>
+   </mat-card>
+</div>

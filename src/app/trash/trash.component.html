@@ -1,0 +1,20 @@
+
+<div *ngIf="currentView" fxLayoutAlign="start center" fxLayoutGap="15px grid " fxLayout="row wrap">
+  
+  <div *ngFor ="let note of allnotes" fxLayout="row wrap">
+            
+        <app-singlecard [notedetails]=note>
+
+        </app-singlecard>
+  </div>
+</div>
+
+<div *ngIf="!currentView" fxLayoutAlign="start center" fxLayoutGap="15px grid" fxLayout="column wrap">
+  
+            <div *ngFor ="let note of allnotes">
+                      
+                  <app-singlecard [notedetails]=note>
+          
+                  </app-singlecard>
+            </div>
+          </div>

@@ -1,0 +1,19 @@
+.example-icon {
+    padding: 0 14px;
+  }
+  
+  .example-spacer {
+    flex: 1 1 20%;
+  }
+
+.bgcolor{
+  background-color: burlywood;
+}
+
+.mat-icon {
+  transform: scale(.8);
+}
+
+mat-button{
+  margin: 1px;
+}
